@@ -76,7 +76,22 @@ gui.add(material.uniforms.uFrequency.value, 'y').min(0).max(20).step(0.01).name(
 const mesh = new THREE.Mesh(geometry, material)
 mesh.scale.y = 2 / 3
 scene.add(mesh)
-gui.add(material.uniforms.uFrequency.value, 'y').min(0).max(20).step(0.01).name('frequencyY')
+mesh.position.x = .2;
+mesh.position.y = -0.18;
+mesh.position.z = 0.7;
+
+mesh.rotation.x = -.65;
+
+
+
+gui.add(mesh.position, 'z').min(-5).max(5).step(0.01).name('position z')
+gui.add(mesh.position, 'y').min(-5).max(5).step(0.01).name('position y')
+
+gui.add(mesh.rotation, 'y').min(-2).max(2).step(0.01).name('rotation y')
+gui.add(mesh.rotation, 'x').min(-2).max(2).step(0.01).name('rotation x')
+
+
+
 /**
  * Sizes
  */
@@ -112,6 +127,22 @@ scene.add(camera)
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 
+
+let scrollY = window.scrollY
+let currentSection = 0
+
+window.addEventListener('scroll', () =>
+{
+    scrollY = window.scrollY
+    const newSection = Math.round(scrollY / sizes.height)
+
+    if(newSection == 1)
+    {
+        mesh.rotation.z = scrollY/1500;  
+    }
+    
+})
+
 /**
  * Renderer
  */
@@ -131,7 +162,14 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Update material
-    material.uniforms.uTime.value = elapsedTime
+    material.uniforms.uTime.value = scrollY/1000
+
+
+
+
+    
+
+
 
     // Update controls
     controls.update()
